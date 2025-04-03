@@ -1,5 +1,6 @@
 ﻿using CarManagement.Application.Common;
 using CarManagement.Domain;
+using CarManagement.Infrastructure.Seed;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -27,5 +28,7 @@ public class CarsManagementContext : DbContext, IDbContext
             dynamic config = Activator.CreateInstance(configType);
             modelBuilder.ApplyConfiguration(config);
         }
+
+        modelBuilder.SeedData();
     }
 }
