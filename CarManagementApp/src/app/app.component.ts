@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { Client, WeatherForecast } from './api/api-reference';
 
 @Component({
   selector: 'app-root',
@@ -9,4 +10,10 @@ import { RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   title = 'CarManagementApp';
+
+  constructor(private client: Client) {
+    client.getWeatherForecast().subscribe(res => {
+      console.log(res);
+    });
+  }
 }
