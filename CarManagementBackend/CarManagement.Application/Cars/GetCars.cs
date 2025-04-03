@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using CarManagement.Application.Common;
+using CarManagement.Application.Extensions;
 using CarManagement.Domain;
 using CarManagement.Domain.Common;
 using MediatR;
@@ -30,22 +33,10 @@ public static class GetCars
         }
     }
 
-    public class RequestHandler : IRequestHandler<Request, PagedResponse<Response.Item>>
+    public class RequestHandler(IMapper mapper, IDbContext dbContext) : IRequestHandler<Request, PagedResponse<Response.Item>>
     {
-        public Task<PagedResponse<Response.Item>> Handle(Request request, CancellationToken cancellationToken)
-        {
-            var car = new Response.Item() { Color = "blue", IsElectric = false, Manufacturer = "Toyota", ModelName = "Jaris", Year = 2020 };
-            var car1 = new Response.Item() { Color = "blue2", IsElectric = false, Manufacturer = "Toyota2", ModelName = "Jaris2", Year = 2020 };
-            var car2 = new Response.Item() { Color = "blue3", IsElectric = false, Manufacturer = "Toyota3", ModelName = "Jaris3", Year = 2020 };
-            var cars = new List<Response.Item>() { car, car1, car2 };
-            var response = new PagedResponse<Response.Item>
-            {
-                Items = cars,
-                TotalCount = cars.Count,
-                PageNumber = 1,
-                PageSize = 10
-            };
-            return Task.FromResult(response);
-        }
+        public Task<PagedResponse<Response.Item>> Handle(Request request, CancellationToken cancellationToken) => dbContext.Cars
+                .ProjectTo<Response.Item>(mapper.ConfigurationProvider, cancellationToken)
+                .ToPagedResponseAsync(request, cancellationToken);
     }
 }
