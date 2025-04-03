@@ -1,4 +1,5 @@
 using CarManagement.Application;
+using CarManagement.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
 builder.Services.AddApplicationServices();
+builder.Services.AddInfrastructure();
 builder.Services.AddOpenApi();
 
 builder.Services.AddCors(options =>
